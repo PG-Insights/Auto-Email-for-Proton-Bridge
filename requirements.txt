@@ -1,0 +1,9 @@
+aiosmtpd==1.4.4.post2
+atpublic==3.1.1
+attrs==22.2.0
+flufl.bounce==4.0
+flufl.i18n==4.1.1
+flufl.lock==7.1.1
+psutil==5.9.4
+python-dotenv==0.21.1
+zope.interface==5.5.2
