@@ -13,22 +13,24 @@ import sys
 from pathlib import Path
 
 MAIN_DIR = Path(__file__).parent
+
 if str(MAIN_DIR) not in sys.path:
     sys.path.append(str(MAIN_DIR))
+if str(Path(MAIN_DIR, '__helpers__')) not in sys.path:
     sys.path.append(str(Path(MAIN_DIR, '__helpers__')))
 
 import compose_email
 from email_helpers import GetFiles
-from ssh_login import ssh_login
+from ssh_login import ssh_login_and_run_function
     
 
 def login_and_send_data(html_path, csv_or_excel_path):
     html_file = GetFiles(html_path)
     email_values = GetFiles(csv_or_excel_path)
-    ssh_login.ssh_login_and_run_function(
+    ssh_login_and_run_function(
         compose_email.send_email_func(
             subject=html_file.filename, 
-            list_of_emails=email_values.data['email'].values, 
+            list_of_emails=email_values.data['emails'], 
             txt=None,
             html=html_file.data)
     )

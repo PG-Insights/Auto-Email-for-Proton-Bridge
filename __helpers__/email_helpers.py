@@ -11,35 +11,31 @@ from pathlib import Path
 
 class GetFiles:
     """ Class for managing the loading of values for the email client"""
-    
+
     def __init__(self, file_path, *args, **kwargs):
         self._file_path = Path(file_path)
         if not self._file_path.is_file():
-            raise ValueError('The selected item is not an file.')
+            raise ValueError(
+                'The selected item is not an file or does not exist.'
+            )
         else:
             self.filename = GetFiles.return_only_file_name(file_path)
             self.data = GetFiles.check_file_and_return_values(
-                self._file_path,
+                file_path,
                 *args,
                 **kwargs
-                )
-            
-    def __repr__(self):
-        return self.values
-    
-    def __str__(self):
-        print(self.values)
-            
+            )
+
     # The read_csv function will need to be modifed
     @staticmethod
     def read_csv_file(file_path, *args, **kwargs) -> pd.DataFrame:
         return pd.read_csv(str(file_path), *args, **kwargs)
-    
-    # The read_excel function will need to be modifed 
+
+    # The read_excel function will need to be modifed
     @staticmethod
     def read_excel_file(file_path, *args, **kwargs) -> pd.DataFrame:
         return pd.read_excel(str(file_path), *args, **kwargs)
-    
+
     # This is fallback function if the filetype is not in SPECIFIED_IMPORTS
     @staticmethod
     def open_any_file_and_read_contents(file_path: str) -> str:
@@ -47,30 +43,24 @@ class GetFiles:
             any_file = f.read()
             f.close()
         return any_file
-    
+
     # Update the dictionary when specific file getters are added to Class
     # The stem should be the dictionary key and value is import function
     SPECIFIED_IMPORTS = {
         '.csv': read_csv_file,
         '.xlsx': read_excel_file,
         '.xls': read_excel_file,
-        }
-    
+    }
+
     @staticmethod
     def return_only_file_name(file_path):
-        filename = Path(file_path).name
-        only_name = str(filename).replace(Path(file_path).stem, '')
-        return only_name
-    
+        return Path(file_path).name
+
     @classmethod
     def check_file_and_return_values(cls, file_path, *args, **kwargs):
-        file_stem = Path(file_path).stem
-        if file_stem in GetFiles.SPECIFIED_IMPORTS.keys():
-            get_func = GetFiles.SPECIFIED_IMPORTS.get(file_stem)
+        file_suffix= Path(file_path).suffix
+        if str(file_suffix) in GetFiles.SPECIFIED_IMPORTS.keys():
+            get_func = GetFiles.SPECIFIED_IMPORTS.get(str(file_suffix))
         else:
-            get_func = GetFiles.open_any_file_and_read_contents(file_path)
+            get_func = GetFiles.open_any_file_and_read_contents
         return get_func(file_path, *args, **kwargs)
-        
-        
-        
-        

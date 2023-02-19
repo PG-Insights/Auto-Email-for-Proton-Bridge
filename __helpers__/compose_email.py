@@ -1,5 +1,6 @@
 import os
 import smtplib
+import time
 from dotenv import load_dotenv
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
@@ -33,7 +34,7 @@ def get_unique_emails_from_series_or_list(series_or_list) -> list:
 
 
 def send_email_func(subject='Let MO Play!',
-                    list_of_emails=list(),
+                    list_of_emails=None,
                     from_email='letmoplay@letmoplay.com',
                     txt=None,
                     html=None) -> None:
@@ -50,7 +51,6 @@ def send_email_func(subject='Let MO Play!',
 
 
 if __name__ == '__main__':
-    import time
     test_emails_list = ['dludwins@outlook.com', 'dludwins0809@gmail.com']
     send_email_func(
         subject='Test Email', 
