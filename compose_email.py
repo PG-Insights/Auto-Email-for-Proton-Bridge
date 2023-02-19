@@ -6,6 +6,7 @@ from email.mime.multipart import MIMEMultipart
 
 load_dotenv()
 
+
 def compose_html_email(subject, from_email,  txt=None, html=None) -> MIMEText:
     msg = MIMEMultipart()
     msg['From'] = from_email
@@ -31,8 +32,13 @@ def get_unique_emails_from_series_or_list(series_or_list) -> list:
     return no_dups_list
 
 
-def send_email_func(subject, list_of_emails, from_email='letmoplay@letmoplay.com', txt=None, html=None) -> None:
-    email_message = compose_html_email(subject, from_email,  txt=txt, html=html)
+def send_email_func(subject,
+                    list_of_emails,
+                    from_email='letmoplay@letmoplay.com',
+                    txt=None,
+                    html=None) -> None:
+    email_message = compose_html_email(
+        subject, from_email,  txt=txt, html=html)
     emails_list = get_unique_emails_from_series_or_list(list_of_emails)
     with smtplib.SMTP('127.0.0.1', 1025) as smtp:
         smtp.starttls()
@@ -40,12 +46,11 @@ def send_email_func(subject, list_of_emails, from_email='letmoplay@letmoplay.com
         time.sleep(.1)
         smtp.sendmail(from_email, [from_email] + emails_list, email_message)
         smtp.quit()
-    print('\nThe email(s) have been sent\n') 
-
+    print('\nThe email(s) have been sent\n')
 
 
 if __name__ == '__main__':
     import time
     test_emails_list = ['dludwins@outlook.com', 'dludwins0809@gmail.com']
-    send_email_func('Test Email', test_emails_list, txt='Text Line', html='<h1>HTML LINE</h1><br><h3 style="color:red";>SMALLER RED HTML</h3>')
-
+    send_email_func('Test Email', test_emails_list, txt='Text Line',
+                    html='<h1>HTML LINE</h1><br><h3 style="color:red";>SMALLER RED HTML</h3>')
