@@ -26,13 +26,15 @@ from ssh_login import ssh_login_and_run_function
 
 def login_and_send_data(html_path, csv_or_excel_path):
     html_file = GetFiles(html_path)
+    encoded_html = GetFiles.encode_html_str(html_file.data)
     email_values = GetFiles(csv_or_excel_path)
+    email_list = email_values.data['emails'].values.tolist()
     ssh_login_and_run_function(
-        compose_email.send_email_func(
-            subject=html_file.filename, 
-            list_of_emails=email_values.data['emails'], 
-            txt=None,
-            html=html_file.data)
+        compose_email.send_email_func,
+        subject=html_file.filename, 
+        list_of_emails=email_list, 
+        txt=None,
+        html=encoded_html,
     )
     
     

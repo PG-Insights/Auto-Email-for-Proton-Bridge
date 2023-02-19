@@ -7,6 +7,7 @@ Created on Sat Feb 18 21:38:22 2023
 """
 import pandas as pd
 from pathlib import Path
+import base64
 
 
 class GetFiles:
@@ -43,6 +44,18 @@ class GetFiles:
             any_file = f.read()
             f.close()
         return any_file
+    
+    @staticmethod
+    def return_only_file_name(file_path):
+        return Path(file_path).name
+    
+    @staticmethod
+    def encode_html_str(html_str):
+        return base64.b64encode(html_str.encode('utf-8')).decode('utf-8')
+    
+    @staticmethod
+    def decode_html_str(html_str):
+        return base64.b64encode(html_str.encode('utf-8')).decode('utf-8')
 
     # Update the dictionary when specific file getters are added to Class
     # The stem should be the dictionary key and value is import function
@@ -51,10 +64,6 @@ class GetFiles:
         '.xlsx': read_excel_file,
         '.xls': read_excel_file,
     }
-
-    @staticmethod
-    def return_only_file_name(file_path):
-        return Path(file_path).name
 
     @classmethod
     def check_file_and_return_values(cls, file_path, *args, **kwargs):
