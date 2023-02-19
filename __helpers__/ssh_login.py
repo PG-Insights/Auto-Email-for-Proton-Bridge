@@ -39,7 +39,7 @@ def ssh_login_and_run_function(func_to_run, *args, **kwargs):
          '-',
          '-K',
          '-t',
-         command
+         command,
          ],
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,

@@ -55,7 +55,7 @@ class GetFiles:
     
     @staticmethod
     def decode_html_str(html_str):
-        return base64.b64encode(html_str.encode('utf-8')).decode('utf-8')
+        return base64.b64decode(html_str.encode('utf-8')).decode('utf-8')
 
     # Update the dictionary when specific file getters are added to Class
     # The stem should be the dictionary key and value is import function
