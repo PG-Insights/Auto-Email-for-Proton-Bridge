@@ -10,11 +10,15 @@ load_dotenv()
 
 def compose_html_email(subject, from_email,  html=None) -> MIMEText:   
     from email_helpers import GetFiles
+    import base64
     msg = MIMEMultipart()
     msg['From'] = from_email
     msg['To'] = from_email
     msg['Subject'] = str(subject)
-    html = GetFiles.decode_html_str(html)
+    try:
+        html = GetFiles.decode_html_str(html)
+    except base64.binascii.Error:
+        pass
     mime_html = MIMEText(html, 'html')
     msg.attach(mime_html)
     message_str = msg.as_string()
