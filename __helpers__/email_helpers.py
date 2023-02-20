@@ -51,7 +51,7 @@ class GetFiles:
     
     @staticmethod
     def return_only_file_name(file_path):
-        return Path(file_path).name
+        return Path(file_path).stem
     
     @staticmethod
     def encode_html_str(html_str):
@@ -63,7 +63,7 @@ class GetFiles:
         return base64.b64decode(html_str.encode('utf-8')).decode('utf-8')
 
     # Update the dictionary when specific file getters are added to Class
-    # The stem should be the dictionary key and value is import function
+    # The suffix should be the dictionary key and value is import function
     SPECIFIED_IMPORTS = {
         '.csv': read_csv_file,
         '.xlsx': read_excel_file,

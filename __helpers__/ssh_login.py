@@ -8,7 +8,7 @@ Created on Sun Feb 19 09:41:54 2023
 
 import os
 import json
-import subprocess
+from fabric import Connection
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -33,29 +33,38 @@ class DoubleQuoteJSONEncoder(json.JSONEncoder):
         return self.encoder(sanitize(obj))
 
 
-def ssh_login_and_run_function(func_to_run, *args, **kwargs):
+def ssh_login_and_run_function(func_to_run, **kwargs):
     path_to_ssh = os.environ.get('SSH_PATH')
     hostname = os.environ.get('VM_HOST')
-    # Serialize args and kwargs as JSON strings
-    args_str = json.dumps(args, cls=DoubleQuoteJSONEncoder)
-    kwargs_str = json.dumps(kwargs, cls=DoubleQuoteJSONEncoder)
-    # Build the SSH command to execute the function
-    command = f'''ssh -i -T {path_to_ssh} opc@{hostname} "cd /home/opc/email_venv && python3.11 -c "import json, sys; sys.path.append('.'); kwargs = json.loads('{kwargs_str}'); from {func_to_run.__module__} import {func_to_run.__name__};{func_to_run.__name__}(*{args_str}, **kwargs)""'''
-    # Run the SSH command and capture its output
-    result = subprocess.run(
-        [command],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        input=b'exit\n',
-    )
 
-    if result.returncode != 0:
-        print(f"Error: {result.stderr.decode('utf-8')}")
-    else:
-  #      print(result.stdout.decode('utf-8'))
-        print('\nThis is printing becuase it should have worked?')
+    # Serialize kwargs as a JSON string
+    kwargs_str = json.dumps(kwargs, 
+                            separators=(',', ':'),
+                            cls=DoubleQuoteJSONEncoder
+                            )
+
+    # Build the Python command to execute the function
+    command = [
+        'python3.11', '-c',
+        f'import json, sys; sys.path.append("."); kwargs = json.loads(\'{kwargs_str}\'); from {func_to_run.__module__} import {func_to_run.__name__}; {func_to_run.__name__}(**kwargs)'
+    ]
+    command_str = ' '.join(command)
+    print(command_str)
+    # Login to the remote machine and execute the command
+    with Connection(hostname, 
+                    user='opc', 
+                    connect_kwargs={'key_filename': path_to_ssh}
+                    ) as conn:
+        result = conn.run(command_str, hide=True, echo=True)
+
+        if result.failed:
+            print('This is printing because it didnt work')
+            print(result.stderr)
+        else:
+            print(result.stdout)
+            print('\nThis is printing because it should have worked?')
 
 if __name__ == '__main__':
     def test_func(str_var='This Is A Test'):
         print(str_var + str_var)
-    ssh_login_and_run_function(test_func, 'Hello, world! ')
+    ssh_login_and_run_function(test_func, html='<h2>Hello, world! </h2>')
