@@ -52,6 +52,5 @@ if __name__ == '__main__':
     send_email_func(
         subject='Test Email', 
         list_of_emails=test_emails_list, 
-        txt='Text Line',
         html='<h1>HTML LINE</h1><br><h3 style="color:red";>SMALL RED HTML</h3>'
         )
