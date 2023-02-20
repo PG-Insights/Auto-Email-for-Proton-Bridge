@@ -36,7 +36,8 @@ class DoubleQuoteJSONEncoder(json.JSONEncoder):
 def ssh_login_and_run_function(func_to_run, **kwargs):
     path_to_ssh = os.environ.get('SSH_PATH')
     hostname = os.environ.get('VM_HOST')
-
+    main_dir = r'/home/opc/email_venv'
+    helpers_dir = r'/home/opc/email_venv/__helpers__'
     # Serialize kwargs as a JSON string
     kwargs_str = json.dumps(kwargs, 
                             separators=(',', ':'),
@@ -45,21 +46,22 @@ def ssh_login_and_run_function(func_to_run, **kwargs):
 
     # Build the Python command to execute the function
     command = [
-        'python3.11', '-c',
-        f'import json, sys; sys.path.append("."); kwargs = json.loads(\'{kwargs_str}\'); from {func_to_run.__module__} import {func_to_run.__name__}; {func_to_run.__name__}(**kwargs)'
+    'python3.11', '-c',
+    f'''"import json; import os, sys; from pathlib import Path; sys.path.append('{main_dir}'); sys.path.append('{helpers_dir}'); from {func_to_run.__module__} import {func_to_run.__name__}; {func_to_run.__name__}(**{kwargs})"'''
     ]
     command_str = ' '.join(command)
-    print(command_str)
     # Login to the remote machine and execute the command
     with Connection(hostname, 
                     user='opc', 
                     connect_kwargs={'key_filename': path_to_ssh}
                     ) as conn:
+        print(conn)
+        conn.run('cd /home/opc/email_venv && ls -a', hide=True, echo=True)
         result = conn.run(command_str, hide=True, echo=True)
 
         if result.failed:
             print('This is printing because it didnt work')
-            print(result.stderr)
+            #print(result.stderr)
         else:
             print(result.stdout)
             print('\nThis is printing because it should have worked?')
@@ -67,4 +69,4 @@ def ssh_login_and_run_function(func_to_run, **kwargs):
 if __name__ == '__main__':
     def test_func(str_var='This Is A Test'):
         print(str_var + str_var)
-    ssh_login_and_run_function(test_func, html='<h2>Hello, world! </h2>')
+    ssh_login_and_run_function(test_func, html='Hello, world!')

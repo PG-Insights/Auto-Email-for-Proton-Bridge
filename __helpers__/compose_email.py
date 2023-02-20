@@ -34,11 +34,10 @@ def get_unique_emails_from_series_or_list(series_or_list) -> list:
 def send_email_func(subject='Let MO Play!',
                     list_of_emails=None,
                     from_email='letmoplay@letmoplay.com',
-                    txt=None,
                     html=None) -> None:
-    email_message = compose_html_email(
-        subject, from_email,  txt=txt, html=html)
+    email_message = compose_html_email(subject, from_email, html=html)
     emails_list = get_unique_emails_from_series_or_list(list_of_emails)
+    print(emails_list)
     with smtplib.SMTP('127.0.0.1', 1025) as smtp:
         smtp.starttls()
         smtp.login(os.environ.get('UNAME'), os.environ.get('PASS'))
