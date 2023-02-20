@@ -8,20 +8,15 @@ from email.mime.multipart import MIMEMultipart
 load_dotenv()
 
 
-def compose_html_email(subject, from_email,  txt=None, html=None) -> MIMEText:    
+def compose_html_email(subject, from_email,  html=None) -> MIMEText:   
+    from email_helpers import GetFiles
     msg = MIMEMultipart()
     msg['From'] = from_email
     msg['To'] = from_email
     msg['Subject'] = str(subject)
-    if txt:
-        mime_text = MIMEText(txt, 'plain')
-        msg.attach(mime_text)
-    if html:
-        if isinstance(html, bytes):
-            from email_helpers import GetFiles
-            html = GetFiles.decode_html_str(html.copy())
-        mime_html = MIMEText(html, 'html')
-        msg.attach(mime_html)
+    html = GetFiles.decode_html_str(html)
+    mime_html = MIMEText(html, 'html')
+    msg.attach(mime_html)
     message_str = msg.as_string()
     return message_str
 

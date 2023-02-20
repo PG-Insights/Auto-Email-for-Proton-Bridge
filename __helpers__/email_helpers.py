@@ -5,9 +5,12 @@ Created on Sat Feb 18 21:38:22 2023
 
 @author: dale
 """
-import pandas as pd
-from pathlib import Path
+
 import base64
+import pandas as pd
+from html import escape
+from pathlib import Path
+
 
 
 class GetFiles:
@@ -41,9 +44,10 @@ class GetFiles:
     @staticmethod
     def open_any_file_and_read_contents(file_path: str) -> str:
         with open(file_path, 'r') as f:
-            any_file = f.read()
+            any_file = f.readlines()
             f.close()
-        return any_file
+        file_str = ''.join(any_file)    
+        return file_str
     
     @staticmethod
     def return_only_file_name(file_path):
@@ -51,7 +55,8 @@ class GetFiles:
     
     @staticmethod
     def encode_html_str(html_str):
-        return base64.b64encode(html_str.encode('utf-8')).decode('utf-8')
+        escaped_html = escape(r"{}".format(html_str))
+        return base64.b64encode(escaped_html.encode('utf-8')).decode('utf-8')
     
     @staticmethod
     def decode_html_str(html_str):

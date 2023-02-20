@@ -33,7 +33,6 @@ def login_and_send_data(html_path, csv_or_excel_path):
         compose_email.send_email_func,
         subject=html_file.filename, 
         list_of_emails=email_list, 
-        txt=None,
         html=encoded_html,
     )
     
