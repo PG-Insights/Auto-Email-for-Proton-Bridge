@@ -65,8 +65,6 @@ if __name__ == '__main__':
         )
         time.sleep(.5)
         commands.run_remote_command_in_shell(conn, c1)
-        print(conn.run('dir'))
-        print(conn.run('python --version'))
         time.sleep(.5)
         commands.run_remote_command_in_shell(conn, c2)
         #print(conn.run('dir'))
