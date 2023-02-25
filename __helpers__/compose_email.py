@@ -4,6 +4,8 @@ import sys
 import smtplib
 from pathlib import Path
 from dotenv import load_dotenv
+from email import encoders
+from email.mime.base import MIMEBase
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 if str(Path(__file__).parents[0]) not in sys.path:
@@ -13,7 +15,7 @@ if str(Path(__file__).parents[0]) not in sys.path:
 load_dotenv()
 
 
-def compose_html_email(subject, from_email,  html=None) -> MIMEText:   
+def compose_html_email(subject, from_email,  html=None, pdf=None) -> MIMEText:   
     from email_helpers import GetFiles
     import base64
     msg = MIMEMultipart()
@@ -26,11 +28,31 @@ def compose_html_email(subject, from_email,  html=None) -> MIMEText:
         pass
     except UnicodeDecodeError:
         pass
-
+    pdf_payload = get_pdf_for_email(pdf)
+    if pdf_payload != None:
+        msg.attach(pdf_payload)
     mime_html = MIMEText(html, 'html')
     msg.attach(mime_html)
     message_str = msg.as_string()
     return message_str
+
+
+def get_pdf_for_email(pdf: str) -> bytes:
+    try:
+        pdfname = GetFiles.return_only_file_name(pdf)
+        binary_pdf = GetFiles(pdf)
+        payload = MIMEBase('application', 'octate-stream', Name=pdfname)
+        payload.set_payload((binary_pdf).read())
+        encoders.encode_base64(payload)
+        payload.add_header(
+            'Content-Decomposition', 
+            'attachment', 
+            filename=pdfname
+        )
+        return payload
+    except Exception as e:
+        print(e)
+        return None
 
 
 def get_unique_emails_from_series_or_list(series_or_list) -> list:
@@ -64,7 +86,7 @@ if __name__ == '__main__':
     subject = None  #'Test'
     emails_list = None  #['dludwins@outlook.com']
     html_str = None  #'<html><h1>test</h1></html>'
-    
+    pdf_attach = None  # /path/to/file.pdf
     if html_str == None or emails_list == None or subject == None:
         import argparse
         parser = argparse.ArgumentParser(
@@ -80,15 +102,22 @@ if __name__ == '__main__':
             type=str, 
             help='Path to CSV or Excel with Emails column'
             )
+        parser.add_argument(
+            'pdf_file', 
+            type=str, 
+            help='PDF File Path'
+            )
         args = parser.parse_args()
         html_file = GetFiles(args.html_file)
         subject = html_file.filename
-        html_str = html_file.data
         emails_list = GetFiles(args.emails_csv_or_excel).data['emails']
+        html_str = html_file.data
+        pdf_attach = args.pdf_file
     # Run the send_email_func with either args or data from IDE
     send_email_func(
         subject=subject, 
         list_of_emails=emails_list, 
-        html=html_str
+        html=html_str,
+        pdf=pdf_attach,
         )
         
