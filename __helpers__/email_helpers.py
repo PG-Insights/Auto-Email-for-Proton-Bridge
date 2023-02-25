@@ -6,8 +6,11 @@ Created on Sat Feb 18 21:38:22 2023
 @author: dale
 """
 
+import base64
 import pandas as pd
+from html import escape
 from pathlib import Path
+
 
 
 class GetFiles:
@@ -50,6 +53,15 @@ class GetFiles:
     def return_only_file_name(file_path):
         return Path(file_path).stem
     
+    @staticmethod
+    def encode_html_str(html_str):
+        escaped_html = escape(r"{}".format(html_str))
+        return base64.b64encode(escaped_html.encode('utf-8')).decode('utf-8')
+    
+    @staticmethod
+    def decode_html_str(html_str):
+        return base64.b64decode(html_str.encode('utf-8')).decode('utf-8')
+
     # Update the dictionary when specific file getters are added to Class
     # The suffix should be the dictionary key and value is import function
     SPECIFIED_IMPORTS = {
