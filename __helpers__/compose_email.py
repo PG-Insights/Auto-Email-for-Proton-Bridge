@@ -24,6 +24,9 @@ def compose_html_email(subject, from_email,  html=None) -> MIMEText:
         html = GetFiles.decode_html_str(html)
     except base64.binascii.Error:
         pass
+    except UnicodeDecodeError:
+        pass
+
     mime_html = MIMEText(html, 'html')
     msg.attach(mime_html)
     message_str = msg.as_string()

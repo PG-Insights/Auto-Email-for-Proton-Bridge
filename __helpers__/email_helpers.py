@@ -55,12 +55,11 @@ class GetFiles:
     
     @staticmethod
     def encode_html_str(html_str):
-        escaped_html = escape(r"\\{}\\".format(html_str))
+        escaped_html = escape(r"{}".format(html_str))
         return base64.b64encode(escaped_html.encode('utf-8')).decode('utf-8')
     
     @staticmethod
     def decode_html_str(html_str):
-        print(html_str)
         return base64.b64decode(html_str.encode('utf-8')).decode('utf-8')
 
     # Update the dictionary when specific file getters are added to Class
@@ -82,4 +81,7 @@ class GetFiles:
 
 
 if __name__ == '__main__':
-    html_path = '/'
+    html_path = '/home/dale/PG_Insights/email_venv/html_files/letmoplay_test_email.html'
+    html_file = GetFiles(html_path)
+    encoded_html = GetFiles.encode_html_str(html_file.data)
+    decoded_html = GetFiles.decode_html_str(encoded_html)
