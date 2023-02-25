@@ -34,8 +34,8 @@ def create_send_email_commands(html_path: str,
         ['source', 
          f'"{str(main_dir)}/bin/activate"'])
     command_send_html_email = " ".join([
-        'python',
-        '"__helpers__/compose_email.py"',
+        'python3.11',
+        f'"{main_dir}/__helpers__/compose_email.py"',
         f'"{html_path}"',
         f'"{csv_or_excel_path}"',
     ]
