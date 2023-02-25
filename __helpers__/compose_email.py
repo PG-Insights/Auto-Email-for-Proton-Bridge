@@ -83,7 +83,7 @@ if __name__ == '__main__':
         args = parser.parse_args()
         html_file = GetFiles(args.html_file)
         subject = html_file.filename
-        html_str = html_file.data
+        html_str = html_file.data['emails']
         emails_list = GetFiles(args.emails_csv_or_excel).data
     # Run the send_email_func with either args or data from IDE
     send_email_func(
