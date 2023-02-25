@@ -46,7 +46,7 @@ class GetFiles:
         with open(file_path, 'r') as f:
             any_file = f.readlines()
             f.close()
-        file_str = ''.join(any_file)    
+        file_str = ' '.join(any_file)    
         return file_str
     
     @staticmethod
@@ -55,11 +55,12 @@ class GetFiles:
     
     @staticmethod
     def encode_html_str(html_str):
-        escaped_html = escape(r"{}".format(html_str))
+        escaped_html = escape(r"\\{}\\".format(html_str))
         return base64.b64encode(escaped_html.encode('utf-8')).decode('utf-8')
     
     @staticmethod
     def decode_html_str(html_str):
+        print(html_str)
         return base64.b64decode(html_str.encode('utf-8')).decode('utf-8')
 
     # Update the dictionary when specific file getters are added to Class
@@ -78,3 +79,7 @@ class GetFiles:
         else:
             get_func = GetFiles.open_any_file_and_read_contents
         return get_func(file_path, *args, **kwargs)
+
+
+if __name__ == '__main__':
+    html_path = '/'

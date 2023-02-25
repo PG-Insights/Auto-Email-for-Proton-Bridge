@@ -46,7 +46,6 @@ if __name__ == '__main__':
         args = parser.parse_args()
 
         conn = return_ssh_connection()
-        print(conn.run('dir'))
         time.sleep(.5)
         commands.trasfer_file_to_remote(
             conn,
@@ -60,13 +59,14 @@ if __name__ == '__main__':
             '/home/opc/email_venv/email_lists',
         )
         time.sleep(.5)
-        c1, c2, c3 = commands.create_send_email_commands(
+        c1, c2, = commands.create_send_email_commands(
             args.html_path,
             args.csv_or_excel_path
         )
         time.sleep(.5)
         commands.run_remote_command_in_shell(conn, c1)
+        print(conn.run('dir'))
+        print(conn.run('python --version'))
         time.sleep(.5)
         commands.run_remote_command_in_shell(conn, c2)
-        time.sleep(.5)
-        commands.run_remote_command_in_shell(conn, c3)
+        #print(conn.run('dir'))
