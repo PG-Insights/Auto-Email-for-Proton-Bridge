@@ -15,11 +15,13 @@ dist/
 downloads/
 eggs/
 .eggs/
+email_lists/
 lib/
 /lib64/*
 lib*
 lib64/
 Lib64/
+html_files/
 parts/
 sdist/
 var/

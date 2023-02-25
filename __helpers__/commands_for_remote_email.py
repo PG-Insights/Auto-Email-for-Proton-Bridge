@@ -6,46 +6,42 @@ Created on Fri Feb 24 18:08:28 2023
 @author: dale
 """
 
-import json
-
-class DoubleQuoteJSONEncoder(json.JSONEncoder):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.encoder = json.JSONEncoder(
-            ensure_ascii=False,
-            separators=(',', ':'),
-            sort_keys=True
-        ).encode
-
-    def encode(self, obj):
-        def sanitize(obj):
-            if isinstance(obj, dict):
-                return {'\\"' + k + '\\"': sanitize(v) for k, v in obj.items()}
-            elif isinstance(obj, list):
-                return [sanitize(elem) for elem in obj]
-            else:
-                return f'"{obj}"'
-        return self.encoder(sanitize(obj))
+from fabric import Connection
     
-def create_send_email_commands(*args, **kwargs):
-    main_dir = r'/home/opc/email_venv'
-    helpers_dir = r'/home/opc/email_venv/__helpers__'
-    # Serialize kwargs as a JSON string
-    kwargs_str = json.dumps(kwargs, 
-                            separators=(',', ':'),
-                            cls=DoubleQuoteJSONEncoder
-                            )
-    command = [
-    'cat', 'email_venv/compose_email.py' 
-#    '--version'
-    ]
-    command_str = ' '.join(command)
-    conn.run('cd /home/opc/email_venv && ls -a', hide=True, echo=True)
-    result = conn.run(command_str, hide=True, echo=True)
+    
+def trasfer_file_to_remote(conn: Connection, 
+                           file_path: str, 
+                           save_path: str) -> None:
+    with conn:
+        conn.put(file_path, save_path)
+        
 
-    if result.failed:
-        print('This is printing because it didnt work')
-        #print(result.stderr)
-    else:
-        print(result.stdout)
-        print('\nThis is printing because it should have worked?')
+def run_remote_command_in_shell(conn: Connection, 
+                                command_str: str) -> None:
+    with conn:
+        conn.run(command_str, shell=True)
+
+    
+def create_send_email_commands(html_path: str, 
+                               csv_or_excel_path: str) -> tuple:
+    from pathlib import Path
+    main_dir = Path('/home/opc/email_venv')
+    html_dir = Path(main_dir, 'html_files')
+    html_path = Path(html_dir, Path(html_path).stem)
+    csv_dir = Path(main_dir, 'email_lists')
+    csv_or_excel_path = Path(csv_dir, Path(csv_or_excel_path).stem)
+    command_move_to_email_venv_dir = ['cd', str(main_dir)]
+    command_activate_venv_command = ['source', 'bin/activate']
+    command_send_html_email = [
+        'python', 
+        '__helpers__/compose_email.py',
+        str(html_path),
+        str(csv_or_excel_path),
+        ]
+    return (
+        command_move_to_email_venv_dir,
+        command_activate_venv_command,
+        command_send_html_email
+        
+        )
+    

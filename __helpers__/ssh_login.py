@@ -24,9 +24,9 @@ def return_ssh_connection(
                       ) 
 
 
-
 if __name__ == '__main__':
     def test_func(str_var='This Is A Test'):
         print(str_var + str_var)
+    
     conn = return_ssh_connection()
     print(conn)

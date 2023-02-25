@@ -1,9 +1,14 @@
 import os
-import smtplib
 import time
+import sys
+import smtplib
+from pathlib import Path
 from dotenv import load_dotenv
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+if str(Path(__file__).parents[0]) not in sys.path:
+    sys.path.append(str(Path(__file__).parents[0]))
+    sys.path.append(str(Path(__file__).parents[1]))
 
 load_dotenv()
 
@@ -51,9 +56,36 @@ def send_email_func(subject='Let MO Play!',
 
 
 if __name__ == '__main__':
-    test_emails_list = ['dludwins@outlook.com', 'dludwins0809@gmail.com']
+    from email_helpers import GetFiles
+    
+    subject = None  #'Test'
+    emails_list = None  #['dludwins@outlook.com']
+    html_str = None  #'<html><h1>test</h1></html>'
+    
+    if html_str == None or emails_list == None or subject == None:
+        import argparse
+        parser = argparse.ArgumentParser(
+            description='Send email with html content'
+            )
+        parser.add_argument(
+            'html_file', 
+            type=str, 
+            help='HTML File Path'
+            )
+        parser.add_argument(
+            'emails_csv_or_excel', 
+            type=str, 
+            help='Path to CSV or Excel with Emails column'
+            )
+        args = parser.parse_args()
+        html_file = GetFiles(args.html_file)
+        subject = html_file.filename
+        html_str = html_file.data
+        emails_list = GetFiles(args.emails_csv_or_excel).data
+    # Run the send_email_func with either args or data from IDE
     send_email_func(
-        subject='Test Email', 
-        list_of_emails=test_emails_list, 
-        html='<h1>HTML LINE</h1><br><h3 style="color:red";>SMALL RED HTML</h3>'
+        subject=subject, 
+        list_of_emails=emails_list, 
+        html=html_str
         )
+        
