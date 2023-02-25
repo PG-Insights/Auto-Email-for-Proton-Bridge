@@ -31,14 +31,15 @@ def create_send_email_commands(html_path: str,
     csv_dir = Path(main_dir, 'email_lists')
     csv_or_excel_path = Path(csv_dir, Path(csv_or_excel_path).name)
     command_activate_venv_command = " ".join(
-        ['source', 
+        ['source',
          f'"{str(main_dir)}/bin/activate"'])
-    command_send_html_email = " ".join([
-        'python3.11',
-        f'"{main_dir}/__helpers__/compose_email.py"',
-        f'"{html_path}"',
-        f'"{csv_or_excel_path}"',
-    ]
+    command_send_html_email = " ".join(
+        [
+            'python3.11',
+            f'{str(main_dir)}/__helpers__/compose_email.py',
+            f'{str(html_path)}',
+            f'{str(csv_or_excel_path)}',
+        ]
     )
     return (
         command_activate_venv_command,
