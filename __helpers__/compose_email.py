@@ -27,21 +27,24 @@ def compose_html_email(subject,
     msg['From'] = from_email
     msg['To'] = from_email
     msg['Subject'] = str(subject)
-    try:
-        html = GetFiles.decode_html_str(html)
-        mime_html = MIMEText(html, 'html')
-        msg.attach(mime_html)
-    except base64.binascii.Error:
-        pass
-    except UnicodeDecodeError:
-        pass
-    pdf_payload = get_pdf_for_email(pdf)
-    if pdf_payload != None:
-        msg.attach(pdf_payload)
     if png != None:
+        img_html = MIMEText('<img src="cid:image1">', 'html')
+        msg.attach(img_html)
         image = MIMEImage(GetFiles(png).data)
         image.add_header('Content-ID', '<image1>')
         msg.attach(image)
+    else:
+        try:
+            html = GetFiles.decode_html_str(html)
+            mime_html = MIMEText(html, 'html')
+            msg.attach(mime_html)
+        except base64.binascii.Error:
+            pass
+        except UnicodeDecodeError:
+            pass
+    pdf_payload = get_pdf_for_email(pdf)
+    if pdf_payload != None:
+        msg.attach(pdf_payload)
     message_str = msg.as_string()
     return message_str
 
