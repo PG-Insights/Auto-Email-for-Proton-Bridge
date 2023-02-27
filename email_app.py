@@ -84,6 +84,7 @@ if __name__ == '__main__':
         c1, c2, = commands.create_send_email_commands(
             args.html_path,
             args.csv_or_excel_path,
+            args.png_path,
             args.pdf_path,
         )
         time.sleep(.5)
