@@ -27,7 +27,7 @@ if __name__ == '__main__':
     
     html_path = None  # Change this to html path if running in an IDE
     csv_or_excel_path = None  # Change this if running from IDE
-
+    pdf_attach = None  # Change this to PDF path if needed
     if html_path is None or csv_or_excel_path is None:
         import argparse
         parser = argparse.ArgumentParser(
@@ -42,6 +42,11 @@ if __name__ == '__main__':
             'csv_or_excel_path',
             type=str,
             help='Path to the csv or excel file with email addresses'
+        )
+        parser.add_argument(
+            'pdf_path',
+            type=str,
+            help='Path to the PDF to include as attachment'
         )
         args = parser.parse_args()
 
@@ -59,9 +64,16 @@ if __name__ == '__main__':
             '/home/opc/email_venv/email_lists',
         )
         time.sleep(.5)
+        commands.trasfer_file_to_remote(
+            conn,
+            args.pdf_path,
+            '/home/opc/email_venv/pdf_attach',
+        )
+        time.sleep(.5)
         c1, c2, = commands.create_send_email_commands(
             args.html_path,
-            args.csv_or_excel_path
+            args.csv_or_excel_path,
+            args.pdf_path,
         )
         time.sleep(.5)
         commands.run_remote_command_in_shell(conn, c1)
