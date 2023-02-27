@@ -54,13 +54,13 @@ def create_send_email_commands(html_path: str,
     command_clear_folders = " ".join(
         [
             'rm',
-            f'"{str(html_dir)}/*"',
+            f'"{str(html_path)}"',
             '&&',
             'rm',
-            f'"{str(png_dir)}/*"',
+            f'"{str(png_path)}"',
             '&&',
             'rm',
-            f'"{str(pdf_dir)}/*"',
+            f'"{str(pdf_path)}"',
         ]
     )
     return (
