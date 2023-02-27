@@ -83,7 +83,7 @@ def get_unique_emails_from_series_or_list(series_or_list) -> list:
 
 def send_email_func(subject='Let MO Play!',
                     list_of_emails=None,
-                    from_email='pginsights@pginsights.org',
+                    from_email='letmoplay@letmoplay.com',
                     html=None,
                     png=None,
                     pdf=None) -> None:
