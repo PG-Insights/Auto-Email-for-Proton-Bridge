@@ -40,7 +40,6 @@ def compose_html_email(subject, from_email,  html=None, pdf=None) -> MIMEText:
 def get_pdf_for_email(pdf: str) -> bytes:
     try:
         pdfname = GetFiles.return_only_file_name(pdf)
-        print(pdfname)
         binary_pdf = GetFiles(pdf)
         payload = MIMEBase(
             'application', 
@@ -52,7 +51,7 @@ def get_pdf_for_email(pdf: str) -> bytes:
         payload.add_header(
             'Content-Decomposition', 
             'attachment', 
-            filename=pdfname
+            filename=f'{pdfname}.pdf',
         )
         return payload
     except Exception as e:
