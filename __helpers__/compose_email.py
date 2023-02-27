@@ -39,7 +39,7 @@ def compose_html_email(subject,
     if pdf_payload != None:
         msg.attach(pdf_payload)
     if png != None:
-        image = MIMEImage(GetFiles(png))
+        image = MIMEImage(GetFiles(png).data)
         image.add_header('Content-ID', '<image1>')
         msg.attach(image)
     message_str = msg.as_string()
