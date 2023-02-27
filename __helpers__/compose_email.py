@@ -55,7 +55,7 @@ def get_pdf_for_email(pdf: str) -> bytes:
             'octate-stream', 
             Name=f'{pdfname}.pdf',
         )
-        payload.set_payload((binary_pdf.data).read())
+        payload.set_payload(binary_pdf.data)
         encoders.encode_base64(payload)
         payload.add_header(
             'Content-Decomposition', 
