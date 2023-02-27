@@ -41,7 +41,6 @@ def get_pdf_for_email(pdf: str) -> bytes:
     try:
         pdfname = GetFiles.return_only_file_name(pdf)
         binary_pdf = GetFiles(pdf)
-        print(binary_pdf)
         payload = MIMEBase('application', 'octate-stream', Name=pdfname)
         payload.set_payload((binary_pdf.data).read())
         encoders.encode_base64(payload)
@@ -52,7 +51,7 @@ def get_pdf_for_email(pdf: str) -> bytes:
         )
         return payload
     except Exception as e:
-        print(e)
+        print('\nError:', e, '\n')
         return None
 
 
