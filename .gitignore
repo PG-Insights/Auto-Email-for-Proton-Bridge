@@ -22,6 +22,8 @@ lib*
 lib64/
 Lib64/
 html_files/
+email_png/
+pdf_attach/
 parts/
 sdist/
 var/
