@@ -42,7 +42,11 @@ def get_pdf_for_email(pdf: str) -> bytes:
         pdfname = GetFiles.return_only_file_name(pdf)
         print(pdfname)
         binary_pdf = GetFiles(pdf)
-        payload = MIMEBase('application', 'octate-stream', Name=pdfname)
+        payload = MIMEBase(
+            'application', 
+            'octate-stream', 
+            Name=f'{pdfname}.pdf',
+        )
         payload.set_payload((binary_pdf.data).read())
         encoders.encode_base64(payload)
         payload.add_header(
