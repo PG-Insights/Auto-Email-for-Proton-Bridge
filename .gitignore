@@ -21,6 +21,7 @@ lib/
 lib*
 lib64/
 Lib64/
+email_lists/
 html_files/
 email_png/
 pdf_attach/
