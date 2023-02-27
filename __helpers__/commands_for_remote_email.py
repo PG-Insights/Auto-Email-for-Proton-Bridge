@@ -56,7 +56,7 @@ def create_send_email_commands(html_path: str,
             'rm',
             f'"{str(html_dir)}/*"',
             '&&',
-            'rm'
+            'rm',
             f'"{str(png_dir)}/*"',
             '&&',
             'rm',
