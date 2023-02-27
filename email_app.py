@@ -81,7 +81,7 @@ if __name__ == '__main__':
             '/home/opc/email_venv/pdf_attach',
         )
         time.sleep(.5)
-        c1, c2, = commands.create_send_email_commands(
+        c1, c2, c3 = commands.create_send_email_commands(
             args.html_path,
             args.csv_or_excel_path,
             args.png_path,
@@ -91,4 +91,6 @@ if __name__ == '__main__':
         commands.run_remote_command_in_shell(conn, c1)
         time.sleep(.5)
         commands.run_remote_command_in_shell(conn, c2)
-        #print(conn.run('dir'))
+        time.sleep(.5)
+        commands.run_remote_command_in_shell(conn, c3)
+        print('\nThe files have been successfully removed\n')

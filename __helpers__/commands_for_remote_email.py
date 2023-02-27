@@ -51,8 +51,21 @@ def create_send_email_commands(html_path: str,
             f'"{str(pdf_path)}"',
         ]
     )
+    command_clear_folders = " ".join(
+        [
+            'rm',
+            f'"{str(html_dir)}*"',
+            '&&',
+            'rm'
+            f'"{str(png_dir)}*"',
+            '&&',
+            'rm',
+            f'"{str(pdf_dir)}*"',
+        ]
+    )
     return (
         command_activate_venv_command,
-        command_send_html_email
+        command_send_html_email,
+        command_clear_folders,
 
     )
