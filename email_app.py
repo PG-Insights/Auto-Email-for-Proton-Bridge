@@ -44,6 +44,11 @@ if __name__ == '__main__':
             help='Path to the csv or excel file with email addresses'
         )
         parser.add_argument(
+            'png_path', 
+            type=str, 
+            help='Path to PNG for email body'
+            )
+        parser.add_argument(
             'pdf_path',
             type=str,
             help='Path to the PDF to include as attachment'
@@ -62,6 +67,12 @@ if __name__ == '__main__':
             conn,
             args.csv_or_excel_path,
             '/home/opc/email_venv/email_lists',
+        )
+        time.sleep(.5)
+        commands.trasfer_file_to_remote(
+            conn,
+            args.png_path,
+            '/home/opc/email_venv/email_png',
         )
         time.sleep(.5)
         commands.trasfer_file_to_remote(

@@ -24,6 +24,7 @@ def run_remote_command_in_shell(conn: Connection,
 
 def create_send_email_commands(html_path: str,
                                csv_or_excel_path: str,
+                               png_path: str,
                                pdf_path: str) -> tuple:
     from pathlib import Path
     main_dir = Path('/home/opc/email_venv')
@@ -33,6 +34,8 @@ def create_send_email_commands(html_path: str,
     csv_or_excel_path = Path(csv_dir, Path(csv_or_excel_path).name)
     pdf_dir = Path(main_dir, 'pdf_attach')
     pdf_path = Path(pdf_dir, Path(pdf_path).name)
+    png_dir = Path(main_dir, 'email_png')
+    png_path = Path(png_dir, Path(png_path).name)
     command_activate_venv_command = " ".join(
         ['source',
          f'{str(main_dir)}/bin/activate'
@@ -44,7 +47,8 @@ def create_send_email_commands(html_path: str,
             f'"{str(main_dir)}/__helpers__/compose_email.py"',
             f'"{str(html_path)}"',
             f'"{str(csv_or_excel_path)}"',
-            f'"{str(pdf_path)}"'
+            f'"{str(png_path)}"',
+            f'"{str(pdf_path)}"',
         ]
     )
     return (
