@@ -68,8 +68,9 @@ def get_unique_emails_from_series_or_list(series_or_list) -> list:
 def send_email_func(subject='Let MO Play!',
                     list_of_emails=None,
                     from_email='pginsights@pginsights.org',
-                    html=None) -> None:
-    email_message = compose_html_email(subject, from_email, html=html)
+                    html=None,
+                    pdf=None) -> None:
+    email_message = compose_html_email(subject, from_email, html=html, pdf=pdf)
     emails_list = get_unique_emails_from_series_or_list(list_of_emails)
     with smtplib.SMTP('127.0.0.1', 1025) as smtp:
         smtp.starttls()
