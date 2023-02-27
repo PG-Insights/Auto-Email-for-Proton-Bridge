@@ -42,7 +42,7 @@ class GetFiles:
     
     # This is fallback function if the filetype is not in SPECIFIED_IMPORTS
     @staticmethod
-    def read_pdf_file(file_path: str) -> str:
+    def open_any_file_and_read_contents(file_path: str) -> str:
         with open(file_path, 'r') as f:
             any_file = f.readlines()
             f.close()
@@ -51,7 +51,7 @@ class GetFiles:
 
     # This is fallback function if the filetype is not in SPECIFIED_IMPORTS
     @staticmethod
-    def open_any_file_and_read_contents(file_path: str) -> str:
+    def read_pdf_file(file_path: str) -> str:
         bin_pdf = open(file_path, 'rb')
         return bin_pdf
     
