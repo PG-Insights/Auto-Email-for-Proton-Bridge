@@ -40,6 +40,8 @@ class GetFiles:
     def read_excel_file(file_path, *args, **kwargs) -> pd.DataFrame:
         return pd.read_excel(str(file_path), *args, **kwargs)
     
+    # 
+    
     # This is fallback function if the filetype is not in SPECIFIED_IMPORTS
     @staticmethod
     def open_any_file_and_read_contents(file_path: str) -> str:
@@ -49,11 +51,12 @@ class GetFiles:
         file_str = ' '.join(any_file)    
         return file_str
 
-    # This is fallback function if the filetype is not in SPECIFIED_IMPORTS
+    # This will import any file and return a bytes string
     @staticmethod
-    def read_pdf_file(file_path: str) -> str:
-        bin_pdf = open(file_path, 'rb')
-        return bin_pdf
+    def read_file_as_bytes(file_path: str) -> bytes:
+        with open(file_path, 'rb') as file:
+            bytes_file = file.read()
+        return bytes_file
     
     @staticmethod
     def return_only_file_name(file_path):
@@ -74,7 +77,8 @@ class GetFiles:
         '.csv': read_csv_file,
         '.xlsx': read_excel_file,
         '.xls': read_excel_file,
-        '.pdf': read_pdf_file,
+        '.pdf': read_file_as_bytes,
+        '.png': read_file_as_bytes,
     }
 
     @classmethod

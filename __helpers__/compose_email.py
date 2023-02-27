@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 from email import encoders
 from email.mime.base import MIMEBase
 from email.mime.text import MIMEText
+from email.mime.image import MIMEImage
 from email.mime.multipart import MIMEMultipart
 if str(Path(__file__).parents[0]) not in sys.path:
     sys.path.append(str(Path(__file__).parents[0]))
@@ -15,7 +16,11 @@ if str(Path(__file__).parents[0]) not in sys.path:
 load_dotenv()
 
 
-def compose_html_email(subject, from_email,  html=None, pdf=None) -> MIMEText:   
+def compose_html_email(subject, 
+                       from_email,  
+                       html=None, 
+                       png=None,
+                       pdf=None) -> MIMEText:   
     from email_helpers import GetFiles
     import base64
     msg = MIMEMultipart()
@@ -24,6 +29,8 @@ def compose_html_email(subject, from_email,  html=None, pdf=None) -> MIMEText:
     msg['Subject'] = str(subject)
     try:
         html = GetFiles.decode_html_str(html)
+        mime_html = MIMEText(html, 'html')
+        msg.attach(mime_html)
     except base64.binascii.Error:
         pass
     except UnicodeDecodeError:
@@ -31,8 +38,10 @@ def compose_html_email(subject, from_email,  html=None, pdf=None) -> MIMEText:
     pdf_payload = get_pdf_for_email(pdf)
     if pdf_payload != None:
         msg.attach(pdf_payload)
-    mime_html = MIMEText(html, 'html')
-    msg.attach(mime_html)
+    if png != None:
+        image = MIMEImage(GetFiles(png))
+        image.add_header('Content-ID', '<image1>')
+        msg.attach(image)
     message_str = msg.as_string()
     return message_str
 
