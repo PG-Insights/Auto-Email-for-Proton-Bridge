@@ -100,6 +100,7 @@ if __name__ == '__main__':
     subject = None  #'Test'
     emails_list = None  #['dludwins@outlook.com']
     html_str = None  #'<html><h1>test</h1></html>'
+    png = None
     pdf_attach = None  # /path/to/file.pdf
     if html_str == None or emails_list == None or subject == None:
         import argparse
@@ -117,6 +118,11 @@ if __name__ == '__main__':
             help='Path to CSV or Excel with Emails column'
             )
         parser.add_argument(
+            'png_path', 
+            type=str, 
+            help='Path to PNG for email body'
+            )
+        parser.add_argument(
             'pdf_file', 
             type=str, 
             help='PDF File Path'
@@ -126,12 +132,14 @@ if __name__ == '__main__':
         subject = html_file.filename
         emails_list = GetFiles(args.emails_csv_or_excel).data['emails']
         html_str = html_file.data
+        png_file = args.png_path
         pdf_attach = args.pdf_file
     # Run the send_email_func with either args or data from IDE
     send_email_func(
         subject=subject, 
         list_of_emails=emails_list, 
         html=html_str,
+        png=png_file,
         pdf=pdf_attach,
         )
         
