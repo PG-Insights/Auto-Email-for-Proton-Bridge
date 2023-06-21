@@ -36,7 +36,7 @@ class GetFiles:
     @staticmethod
     def read_csv_file(file_path, **kwargs) -> pd.DataFrame:
         return pd.read_csv(
-            str(file_path), 
+            file_path, 
             usecols=['emails'], 
             **kwargs
         )
