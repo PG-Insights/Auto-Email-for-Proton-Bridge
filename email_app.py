@@ -98,8 +98,8 @@ if __name__ == '__main__':
         c1, c2, c3 = commands.create_send_email_commands(
             args.html_path,
             args.emails_path,
-            args.png_path,
-            args.pdf_path,
+            png_path=args.png_path,
+            pdf_path=args.pdf_path,
         )        
         time.sleep(.5)
         commands.run_remote_command_in_shell(conn, c1)
