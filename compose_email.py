@@ -34,7 +34,7 @@ def get_unique_emails_from_series_or_list(series_or_list) -> list:
 
 def send_email_func(subject,
                     list_of_emails,
-                    from_email='letmoplay@letmoplay.com',
+                    from_email='contact@cupsnbowls.com',
                     txt=None,
                     html=None) -> None:
     email_message = compose_html_email(
@@ -52,5 +52,9 @@ def send_email_func(subject,
 if __name__ == '__main__':
     import time
     test_emails_list = ['dludwins@outlook.com', 'dludwins0809@gmail.com']
-    send_email_func('Test Email', test_emails_list, txt='Text Line',
-                    html='<h1>HTML LINE</h1><br><h3 style="color:red";>SMALLER RED HTML</h3>')
+    send_email_func(
+        'Test Email', 
+        test_emails_list, 
+        txt='Text Line',
+        html='<h1>HTML LINE</h1><br><h3 style="color:red";>RED HTML</h3>'
+    )
