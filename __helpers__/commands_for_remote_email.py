@@ -49,7 +49,7 @@ def create_send_email_commands(
     command_activate_venv_command = " ".join(
         [
             'source',
-            f'{str(main_dir)}/bin/activate'
+            f'{str(main_dir)}/venv/bin/activate'
          ]
     )
     command_send_html_email = [
