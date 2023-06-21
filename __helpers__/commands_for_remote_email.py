@@ -72,7 +72,7 @@ def create_send_email_commands(
         png_path = Path(png_dir, Path(png_path).name)
         send_command = [
             '--png_path'
-            f'"{str(png_path)}"'
+            f' "{str(png_path)}"'
         ]
         clear_command = [
             '&&',
@@ -87,7 +87,7 @@ def create_send_email_commands(
         pdf_path = Path(pdf_dir, Path(pdf_path).name)
         send_command = [
             '--pdf_path'
-            f'"{str(pdf_path)}"'
+            f' "{str(pdf_path)}"'
         ]
         clear_command = [
             '&&',
