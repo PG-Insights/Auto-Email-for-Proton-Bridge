@@ -23,7 +23,6 @@ def trasfer_file_to_remote(
         save_path: str) -> None:
     with conn:
         conn.put(file_path, save_path)
-        conn.close()
 
 
 def run_remote_command_in_shell(
@@ -31,7 +30,6 @@ def run_remote_command_in_shell(
         command_str: str) -> None:
     with conn:
         conn.run(command_str, asynchronous=False)
-        conn.close()
 
 
 def create_send_email_commands(
