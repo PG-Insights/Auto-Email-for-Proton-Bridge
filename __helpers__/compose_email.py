@@ -168,7 +168,8 @@ if __name__ == '__main__':
         html_path = args.html_path
         png_path = args.png_path if args.png_path else None
         pdf_path = args.pdf_path if args.pdf_path else None
-
+    print(html_path)
+    print(emails_path)
     # Create the email_obj from either args or data from IDE
     email_obj = ComposeEmail(
         emails_path,
