@@ -34,7 +34,8 @@ class ComposeEmail:
             pdf_path=None):
         self.msg = MIMEMultipart()
         self.from_email = from_email
-        self.emails_list_path = Path(emails_list_path)
+        self.emails_list_path = emails_list_path
+        self.emails_list = GetFiles(self.emails_list_path).data
         self.html_obj = GetFiles(html_path)
         self.email_subject = self.html_obj.filename
         if png_path:
@@ -101,20 +102,17 @@ class ComposeEmail:
         pdf_payload = self.get_pdf_for_email()
         self.msg.attach(pdf_payload)
     
-    @staticmethod
-    def get_unique_emails_from_series_or_list(series_or_list) -> list:
-        if isinstance(series_or_list, list):
-            no_dups = set(series_or_list)
+    def get_unique_emails_from_series_or_list(self) -> list:
+        if isinstance(self.emails_list, list):
+            no_dups = set(self.emails_list)
             no_dups_list = list(no_dups)
         else:
-            no_dups = series_or_list.unique()
+            no_dups = self.emails_list['emails'].unique()
             no_dups_list = no_dups.tolist()
         return no_dups_list
     
     def send_email_func(self) -> None:  
-        emails_list = self.get_unique_emails_from_series_or_list(
-            self.emails_list
-        )
+        emails_list = self.get_unique_emails_from_series_or_list()
         with smtplib.SMTP(self._ip, self._port) as smtp:
             smtp.starttls()
             smtp.login(os.environ.get('UNAME'), os.environ.get('PASS'))
@@ -173,6 +171,16 @@ if __name__ == '__main__':
         png_path=png_path,
         pdf_path=pdf_path
     )
-    print(email_obj.composed_email)
-
+    try:
+        email_obj.send_email_func()
+    except ConnectionRefusedError:
+        print(
+            """
+            
+**********************************************
+    Your email server is not running!
+**********************************************
+            
+            """
+        )
         

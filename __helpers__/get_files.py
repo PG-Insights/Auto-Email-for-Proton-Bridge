@@ -39,7 +39,7 @@ class GetFiles:
             str(file_path), 
             usecols=['emails'], 
             **kwargs
-        ).values
+        )
 
     # The read_excel function will need to be modifed
     @staticmethod
@@ -48,7 +48,7 @@ class GetFiles:
             str(file_path), 
             usecols=['emails'], 
             **kwargs
-        ).values
+        )
     
     # This is fallback function if the filetype is not in SPECIFIED_IMPORTS
     @staticmethod
