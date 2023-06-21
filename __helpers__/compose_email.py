@@ -168,8 +168,7 @@ if __name__ == '__main__':
         html_path = args.html_path
         png_path = args.png_path if args.png_path else None
         pdf_path = args.pdf_path if args.pdf_path else None
-    print(html_path)
-    print(emails_path)
+    
     # Create the email_obj from either args or data from IDE
     email_obj = ComposeEmail(
         emails_path,
@@ -177,17 +176,17 @@ if __name__ == '__main__':
         png_path=png_path,
         pdf_path=pdf_path
     )
-    print(email_obj.composed_email)
-    #try:
-    #    email_obj.send_email_func()
-    #except ConnectionRefusedError:
-    #    print(
-    #        """
+
+    try:
+        email_obj.send_email_func()
+    except ConnectionRefusedError:
+        print(
+            """
             
-#**********************************************
-#    Your email server is not running!
-#**********************************************
+**********************************************
+    Your email server is not running!
+**********************************************
             
-#            """
-#        )
+            """
+        )
         
