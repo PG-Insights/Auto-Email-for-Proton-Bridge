@@ -61,8 +61,8 @@ if __name__ == '__main__':
         
         args = parser.parse_args()
 
-        emails_path = args.emails_path
         html_path = args.html_path
+        emails_path = args.emails_path
         png_path = args.png_path if args.png_path else None
         pdf_path = args.pdf_path if args.pdf_path else None
 
