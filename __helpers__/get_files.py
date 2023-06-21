@@ -17,6 +17,7 @@ class GetFiles:
 
     def __init__(self, file_path, *args, **kwargs):
         self._file_path = Path(file_path)
+        print(self._file_path, '\n\n')
         if not self._file_path.is_file():
             raise ValueError(
                 'The selected item is not an file or does not exist.'
