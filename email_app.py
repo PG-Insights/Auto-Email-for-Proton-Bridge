@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 You must already have an instance of the email_server running on the
-same machine, as well as the Proton-Bridge mail client
+remote machine, as well as the Proton-Bridge mail client
 
 Created on Sun Feb 19 09:26:48 2023
 
@@ -25,35 +25,46 @@ if __name__ == '__main__':
     import commands_for_remote_email as commands
     from ssh_login import return_ssh_connection
     
-    html_path = None  # Change this to html path if running in an IDE
-    csv_or_excel_path = None  # Change this if running from IDE
-    pdf_attach = None  # Change this to PDF path if needed
-    if html_path is None or csv_or_excel_path is None:
+    app_dir = Path(__file__).parents[1]
+    html_path = None #f'{app_dir}/html_files/Cups and Bowls Newsletter 1.html' 
+    emails_path = None #f'{app_dir}/email_lists/test_list_1.csv'  
+    png_path = None #f'{app_dir}/email_png/no_chalk_pdf_png_test.png'
+    pdf_path = None #f'{app_dir}/pdf_attach/cnb_newsletter_1.pdf' 
+    if emails_path == None or html_path == None:
         import argparse
         parser = argparse.ArgumentParser(
-            description='Send email with html content on remote machine'
+            description='Send email with html content'
         )
         parser.add_argument(
-            'html_path',
-            type=str,
-            help='Path to the HTML file'
-        )
-        parser.add_argument(
-            'csv_or_excel_path',
-            type=str,
-            help='Path to the csv or excel file with email addresses'
-        )
-        parser.add_argument(
-            'png_path', 
+            'html_path', 
             type=str, 
-            help='Path to PNG for email body'
-            )
-        parser.add_argument(
-            'pdf_path',
-            type=str,
-            help='Path to the PDF to include as attachment'
+            help='HTML File Path'
         )
+        parser.add_argument(
+            'emails_path', 
+            type=str, 
+            help='Path to CSV or Excel with "emails" column'
+        )
+        
+        parser.add_argument(
+            '--png_path',
+            type=str, 
+            default=None, 
+            help='Path to PNG for email body'
+        )
+        parser.add_argument(
+            '--pdf_path', 
+            type=str, 
+            default=None, 
+            help='PDF File Path'
+        )
+        
         args = parser.parse_args()
+
+        emails_path = args.emails_path
+        html_path = args.html_path
+        png_path = args.png_path if args.png_path else None
+        pdf_path = args.pdf_path if args.pdf_path else None
 
         conn = return_ssh_connection()
         time.sleep(.5)
@@ -65,28 +76,31 @@ if __name__ == '__main__':
         time.sleep(.5)
         commands.trasfer_file_to_remote(
             conn,
-            args.csv_or_excel_path,
+            args.emails_path,
             '/home/opc/email_venv/email_lists',
         )
         time.sleep(.5)
-        commands.trasfer_file_to_remote(
-            conn,
-            args.png_path,
-            '/home/opc/email_venv/email_png',
-        )
-        time.sleep(.5)
-        commands.trasfer_file_to_remote(
-            conn,
-            args.pdf_path,
-            '/home/opc/email_venv/pdf_attach',
-        )
-        time.sleep(.5)
+        if png_path:
+            commands.trasfer_file_to_remote(
+                conn,
+                args.png_path,
+                '/home/opc/email_venv/email_png',
+            )
+            time.sleep(.5)
+        if pdf_path:
+            commands.trasfer_file_to_remote(
+                conn,
+                args.pdf_path,
+                '/home/opc/email_venv/pdf_attach',
+            )
+            time.sleep(.5)
+
         c1, c2, c3 = commands.create_send_email_commands(
             args.html_path,
-            args.csv_or_excel_path,
+            args.emails_path,
             args.png_path,
             args.pdf_path,
-        )
+        )        
         time.sleep(.5)
         commands.run_remote_command_in_shell(conn, c1)
         time.sleep(.5)

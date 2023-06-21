@@ -9,7 +9,11 @@ Created on Fri Feb 24 18:08:28 2023
 
 from fabric import Connection
 from pathlib import Path
-from compose_email import ComposeEmail
+import sys
+
+if str(Path(__file__).parent) not in sys.path:
+    sys.path.append(str(Path(__file__).parent))
+from __helpers__.compose_email import ComposeEmail
 
 
 

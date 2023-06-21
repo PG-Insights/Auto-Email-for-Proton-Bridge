@@ -35,6 +35,7 @@ class ComposeEmail:
         self.msg = MIMEMultipart()
         self.from_email = from_email
         self.emails_list_path = emails_list_path
+        print(emails_list_path)
         self.emails_list = GetFiles(self.emails_list_path).data
         self.html_obj = GetFiles(html_path)
         self.email_subject = self.html_obj.filename
@@ -128,10 +129,10 @@ class ComposeEmail:
 
 if __name__ == '__main__':    
     app_dir = Path(__file__).parents[1]
-    emails_path = f'{app_dir}/email_lists/test_list_1.csv'  
-    html_path = f'{app_dir}/html_files/Cups and Bowls Newsletter 1.html' 
-    png_path = f'{app_dir}/email_png/no_chalk_pdf_png_test.png'
-    pdf_path = f'{app_dir}/pdf_attach/cnb_newsletter_1.pdf' 
+    html_path = None #f'{app_dir}/html_files/Cups and Bowls Newsletter 1.html' 
+    emails_path = None #f'{app_dir}/email_lists/test_list_1.csv'  
+    png_path = None #f'{app_dir}/email_png/no_chalk_pdf_png_test.png'
+    pdf_path = None #f'{app_dir}/pdf_attach/cnb_newsletter_1.pdf' 
     if emails_path == None or html_path == None:
         import argparse
         parser = argparse.ArgumentParser(
@@ -147,23 +148,27 @@ if __name__ == '__main__':
             type=str, 
             help='Path to CSV or Excel with "emails" column'
         )
+        
         parser.add_argument(
-            'png_path', 
+            '--png_path',
             type=str, 
+            default=None, 
             help='Path to PNG for email body'
         )
         parser.add_argument(
-            'pdf_path', 
+            '--pdf_path', 
             type=str, 
+            default=None, 
             help='PDF File Path'
         )
+        
         args = parser.parse_args()
-        html_file = GetFiles(args.html_file)
-        subject = html_file.filename
-        emails_path = GetFiles(args.emails_csv_or_excel).data['emails']
-        html_path = html_file.data
-        png_path = args.png_path
-        pdf_path = args.pdf_file
+
+        emails_path = args.emails_path
+        html_path = args.html_path
+        png_path = args.png_path if args.png_path else None
+        pdf_path = args.pdf_path if args.pdf_path else None
+
     # Create the email_obj from either args or data from IDE
     email_obj = ComposeEmail(
         emails_path,
@@ -171,16 +176,17 @@ if __name__ == '__main__':
         png_path=png_path,
         pdf_path=pdf_path
     )
-    try:
-        email_obj.send_email_func()
-    except ConnectionRefusedError:
-        print(
-            """
+    print(email_obj.composed_email)
+    #try:
+    #    email_obj.send_email_func()
+    #except ConnectionRefusedError:
+    #    print(
+    #        """
             
-**********************************************
-    Your email server is not running!
-**********************************************
+#**********************************************
+#    Your email server is not running!
+#**********************************************
             
-            """
-        )
+#            """
+#        )
         
