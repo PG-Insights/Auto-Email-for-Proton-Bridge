@@ -70,23 +70,31 @@ def create_send_email_commands(
     if png_path:
         png_dir = Path(main_dir, 'email_png')
         png_path = Path(png_dir, Path(png_path).name)
+        send_command = [
+            '--png_path'
+            f'"{str(png_path)}"'
+        ]
         clear_command = [
             '&&',
             'rm',
             f'"{str(png_path)}"'
         ]
-        command_send_html_email.append(f'"{str(png_path)}"')
+        command_send_html_email = command_send_html_email + send_command
         command_clear_folders = command_clear_folders + clear_command
         
     if pdf_path:
         pdf_dir = Path(main_dir, 'pdf_attach')
         pdf_path = Path(pdf_dir, Path(pdf_path).name)
+        send_command = [
+            '--pdf_path'
+            f'"{str(pdf_path)}"'
+        ]
         clear_command = [
             '&&',
             'rm',
             f'"{str(pdf_path)}"'
         ]
-        command_send_html_email.append(f'"{str(pdf_path)}"')
+        command_send_html_email = command_send_html_email + send_command
         command_clear_folders = command_clear_folders + clear_command
     command_send_html_email_str = " ".join(command_send_html_email)
     command_clear_folders_str = " ".join(command_clear_folders)
