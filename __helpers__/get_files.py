@@ -12,7 +12,6 @@ from html import escape
 from pathlib import Path
 
 
-
 class GetFiles:
     """ Class for managing the loading of values for the email client"""
 
@@ -23,7 +22,10 @@ class GetFiles:
                 'The selected item is not an file or does not exist.'
             )
         else:
-            self.filename = GetFiles.return_only_file_name(file_path)
+            self.filename = GetFiles.return_only_file_stem(file_path)
+            self.name_wo_extension = GetFiles.return_only_file_name(
+                file_path
+            )
             self.data = GetFiles.check_file_and_return_values(
                 file_path,
                 *args,
@@ -32,15 +34,21 @@ class GetFiles:
 
     # The read_csv function will need to be modifed
     @staticmethod
-    def read_csv_file(file_path, *args, **kwargs) -> pd.DataFrame:
-        return pd.read_csv(str(file_path), *args, **kwargs)
+    def read_csv_file(file_path, **kwargs) -> pd.DataFrame:
+        return pd.read_csv(
+            str(file_path), 
+            usecols=['emails'], 
+            **kwargs
+        ).values
 
     # The read_excel function will need to be modifed
     @staticmethod
-    def read_excel_file(file_path, *args, **kwargs) -> pd.DataFrame:
-        return pd.read_excel(str(file_path), *args, **kwargs)
-    
-    # 
+    def read_excel_file(file_path, **kwargs) -> pd.DataFrame:
+        return pd.read_excel(
+            str(file_path), 
+            usecols=['emails'], 
+            **kwargs
+        ).values
     
     # This is fallback function if the filetype is not in SPECIFIED_IMPORTS
     @staticmethod
@@ -59,8 +67,12 @@ class GetFiles:
         return bytes_file
     
     @staticmethod
-    def return_only_file_name(file_path):
+    def return_only_file_stem(file_path):
         return Path(file_path).stem
+    
+    @staticmethod
+    def return_only_file_name(file_path):
+        return Path(file_path).name
     
     @staticmethod
     def encode_html_str(html_str):
