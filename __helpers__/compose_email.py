@@ -34,18 +34,17 @@ class ComposeEmail:
             pdf_path=None):
         self.msg = MIMEMultipart()
         self.from_email = from_email
-        self.emails_list_path = emails_list_path
-        print(emails_list_path)
+        self.emails_list_path = f'{self._vm_email_path}/{emails_list_path}'
         self.emails_list = GetFiles(self.emails_list_path).data
-        self.html_obj = GetFiles(html_path)
+        self.html_obj = GetFiles(f'{self._vm_email_path}/{html_path}')
         self.email_subject = self.html_obj.filename
         if png_path:
-            self.png_path = Path(png_path)
+            self.png_path = Path(self._vm_email_path, png_path)
         else:
             self.png_path = None
         
         if pdf_path:
-            self.pdf_path = Path(pdf_path)
+            self.pdf_path = Path(self._vm_email_path, pdf_path)
         else:
             self.pdf_path = None
         
