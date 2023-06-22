@@ -120,7 +120,7 @@ class ComposeEmail:
             smtp.sendmail(
                 self.from_email, 
                 [self.from_email] + emails_list, 
-                self.email_message
+                self.composed_email
             )
             smtp.quit()
         print('\nThe email(s) have been sent\n')
