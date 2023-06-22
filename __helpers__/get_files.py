@@ -75,6 +75,11 @@ class GetFiles:
         return Path(file_path).name
     
     @staticmethod
+    def _append_tracking_url_to_html_str(url_str, html_str):
+        full_url = f'https://cupsnbowls.com/email_monitoring/{url_str}'
+        return f'<img src="{full_url}" width="1" height="1" alt="">' + html_str
+    
+    @staticmethod
     def encode_html_str(html_str):
         escaped_html = escape(r"{}".format(html_str))
         return base64.b64encode(escaped_html.encode('utf-8')).decode('utf-8')

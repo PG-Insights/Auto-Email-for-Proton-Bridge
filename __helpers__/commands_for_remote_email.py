@@ -36,6 +36,7 @@ def create_send_email_commands(
         html_path: str,
         csv_or_excel_path: str,
         *,
+        url_str: str=None,
         png_path: str=None,
         pdf_path: str=None,) -> tuple:
     main_dir = ComposeEmail._vm_email_path  # this needs to match remote box
@@ -64,6 +65,13 @@ def create_send_email_commands(
         'rm',
         f'"{str(csv_or_excel_path)}"'
     ]
+    
+    if url_str:
+        send_command = [
+            '----url_str'
+            f' "{str(url_str)}"'
+        ]
+        command_send_html_email = command_send_html_email + send_command
 
     if png_path:
         png_dir = Path(main_dir, 'email_png')

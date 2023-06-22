@@ -45,7 +45,12 @@ if __name__ == '__main__':
             type=str, 
             help='Path to CSV or Excel with "emails" column'
         )
-        
+        parser.add_argument(
+            '--url_str', 
+            type=str,
+            default=None,
+            help='Final URL path for tracking'
+        )
         parser.add_argument(
             '--png_path',
             type=str, 
@@ -61,8 +66,9 @@ if __name__ == '__main__':
         
         args = parser.parse_args()
 
-        html_path = args.html_path
         emails_path = args.emails_path
+        html_path = args.html_path
+        url_str = args.url_str if args.url_str else None
         png_path = args.png_path if args.png_path else None
         pdf_path = args.pdf_path if args.pdf_path else None
 
@@ -98,6 +104,7 @@ if __name__ == '__main__':
         c1, c2, c3 = commands.create_send_email_commands(
             args.html_path,
             args.emails_path,
+            url_str=args.url_str,
             png_path=args.png_path,
             pdf_path=args.pdf_path,
         )        

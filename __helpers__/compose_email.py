@@ -29,14 +29,21 @@ class ComposeEmail:
             html_path: str,
             from_email: str='contact@cupsnbowls.com',
             *,
-            png_path=None,
-            pdf_path=None):
+            url_str: str=None,
+            png_path: str=None,
+            pdf_path: str=None):
         self.msg = MIMEMultipart()
         self.from_email = from_email
         self.emails_list_path = emails_list_path
         self.emails_list = GetFiles(self.emails_list_path).data
         self.html_obj = GetFiles(html_path)
         self.email_subject = self.html_obj.filename
+        
+        if url_str:
+            self.html_obj.data = GetFiles._append_tracking_url_to_html_str(
+                url_str,
+                self.html_obj.data
+            )
         if png_path:
             self.png_path = Path(png_path)
         else:
@@ -63,8 +70,7 @@ class ComposeEmail:
     def _add_html_to_msg(self):
         mime_html = MIMEText(self.html_obj.data, 'html')
         self.msg.attach(mime_html)
-        
-        
+
     def add_png_to_email(self):
         img_html = MIMEText('<img src="cid:image1">', 'html')
         self.msg.attach(img_html)
@@ -141,7 +147,12 @@ if __name__ == '__main__':
             type=str, 
             help='Path to CSV or Excel with "emails" column'
         )
-        
+        parser.add_argument(
+            '--url_str', 
+            type=str,
+            default=None,
+            help='Final URL path for tracking'
+        )
         parser.add_argument(
             '--png_path',
             type=str, 
@@ -159,6 +170,7 @@ if __name__ == '__main__':
 
         emails_path = args.emails_path
         html_path = args.html_path
+        url_str = args.url_str if args.url_str else None
         png_path = args.png_path if args.png_path else None
         pdf_path = args.pdf_path if args.pdf_path else None
     
@@ -166,6 +178,7 @@ if __name__ == '__main__':
     email_obj = ComposeEmail(
         emails_path,
         html_path,
+        url_str=url_str,
         png_path=png_path,
         pdf_path=pdf_path
     )
