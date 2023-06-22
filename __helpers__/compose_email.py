@@ -62,9 +62,7 @@ class ComposeEmail:
         return self.msg.as_string()
     
     def _add_html_to_msg(self):
-        encoded_html = GetFiles.encode_html_str(self.html_obj.data)
-        html = GetFiles.decode_html_str(encoded_html)
-        mime_html = MIMEText(html, 'html')
+        mime_html = MIMEText(self.html_obj.data, 'html')
         self.msg.attach(mime_html)
         
         
