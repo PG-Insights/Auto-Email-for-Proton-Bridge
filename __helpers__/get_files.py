@@ -57,7 +57,6 @@ class GetFiles:
             any_file = f.readlines()
             f.close()
         file_str = ' '.join(any_file)    
-        print(file_str)
         return file_str
 
     # This will import any file and return a bytes string
@@ -105,7 +104,7 @@ class GetFiles:
 
 
 if __name__ == '__main__':
-    html_path = '/home/dale/PG_Insights/email_venv/html_files/letmoplay_test_email.html'
+    html_path = '/home/dale/PG_Insights/email_venv/html_files/Newsletter_Simple_Test_1.html'
     html_file = GetFiles(html_path)
     encoded_html = GetFiles.encode_html_str(html_file.data)
     decoded_html = GetFiles.decode_html_str(encoded_html)
