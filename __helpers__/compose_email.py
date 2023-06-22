@@ -2,7 +2,6 @@ import os
 import time
 import sys
 import smtplib
-import base64
 from pathlib import Path
 from dotenv import load_dotenv
 from email import encoders
