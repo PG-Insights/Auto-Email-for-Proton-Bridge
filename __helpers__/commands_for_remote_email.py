@@ -68,7 +68,7 @@ def create_send_email_commands(
     
     if url_str:
         send_command = [
-            '----url_str'
+            '--url_str'
             f' "{str(url_str)}"'
         ]
         command_send_html_email = command_send_html_email + send_command
