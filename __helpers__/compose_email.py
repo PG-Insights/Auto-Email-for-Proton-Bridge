@@ -62,14 +62,10 @@ class ComposeEmail:
         return self.msg.as_string()
     
     def _add_html_to_msg(self):
-        try:
-            html = GetFiles.decode_html_str(self.html_obj.data)
-            mime_html = MIMEText(html, 'html')
-            self.msg.attach(mime_html)
-        except base64.binascii.Error:
-            pass
-        except UnicodeDecodeError:
-            pass
+        html = GetFiles.decode_html_str(self.html_obj.data)
+        mime_html = MIMEText(html, 'html')
+        self.msg.attach(mime_html)
+        
         
     def add_png_to_email(self):
         img_html = MIMEText('<img src="cid:image1">', 'html')
