@@ -18,10 +18,11 @@ def return_ssh_connection(
         hostname = os.environ.get('VM_HOST')
         ) -> Connection:
     # Login to the remote machine and return connection
-    return Connection(hostname, 
-                      user='opc', 
-                      connect_kwargs={'key_filename': path_to_ssh}
-                      ) 
+    return Connection(
+        hostname, 
+        user='opc', 
+        connect_kwargs={'key_filename': path_to_ssh}
+    ) 
 
 
 if __name__ == '__main__':

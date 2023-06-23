@@ -10,6 +10,8 @@ Created on Fri Feb 24 18:08:28 2023
 from fabric import Connection
 from pathlib import Path
 import sys
+import os
+import BytesIO
 
 if str(Path(__file__).parent) not in sys.path:
     sys.path.append(str(Path(__file__).parent))
@@ -21,16 +23,14 @@ def transfer_file_to_remote(
         conn: Connection, 
         file_path: str, 
         save_path: str) -> None:
-    transport = conn.get_transport
-    sftp = transport.open_sftp()
+    chunk_size = 1024 * 1024  # 1 MiB
+    file_size = os.path.getsize(file_path)
     with open(file_path, 'rb') as f:
-        with sftp.file(save_path, 'wb') as remote_file:
-            while True:
-                data = f.read(1024)
-                if not data:
-                    break
-                remote_file.write(data)
-    sftp.close()
+        for i in range(0, file_size, chunk_size):
+            chunk = f.read(chunk_size)
+            remote_file_path = f"{save_path}.part{i // chunk_size}"
+            conn.put(BytesIO(chunk), remote_file_path)
+    conn.run(f'cat {save_path}.part* > {save_path} && rm {save_path}.part*')
 
 
 def run_remote_command_in_shell(
