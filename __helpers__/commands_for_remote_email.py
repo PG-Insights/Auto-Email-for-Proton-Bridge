@@ -9,9 +9,10 @@ Created on Fri Feb 24 18:08:28 2023
 
 from fabric import Connection
 from pathlib import Path
+from io import BytesIO
 import sys
 import os
-from io import BytesIO
+
 
 if str(Path(__file__).parent) not in sys.path:
     sys.path.append(str(Path(__file__).parent))
@@ -19,24 +20,34 @@ from __helpers__.compose_email import ComposeEmail
 
 
 
-def transfer_file_to_remote(
+def trasfer_file_to_remote(
+        conn: Connection,
+        file_path: str,
+        save_path: str) -> None:
+    with conn:
+        conn.put(file_path, save_path)
+        
+
+def transfer_large_file_to_remote(
         conn: Connection, 
         file_path: str, 
         save_path: str) -> None:
     chunk_size = 1024 * 512
     file_size = os.path.getsize(file_path)
+    file_name = Path(file_path).name
     with open(file_path, 'rb') as f:
         for i in range(0, file_size, chunk_size):
             chunk = f.read(chunk_size)
             remote_file_path = str(
                 Path(
                     save_path, 
+                    
                     f'part{i // chunk_size}'
                 )
             )
             conn.put(BytesIO(chunk), remote_file_path)
     conn.run(
-        f'cat {save_path}/part* > {save_path}/file && rm {save_path}/part*'
+        f'cat {save_path}/part* > {save_path}/{file_name} && rm {save_path}/part*'
     )
 
 
