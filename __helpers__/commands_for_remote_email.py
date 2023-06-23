@@ -20,7 +20,7 @@ from __helpers__.compose_email import ComposeEmail
 
 
 
-def trasfer_file_to_remote(
+def transfer_file_to_remote(
         conn: Connection,
         file_path: str,
         save_path: str) -> None:
