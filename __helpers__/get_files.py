@@ -59,7 +59,8 @@ class GetFiles:
             any_file = f.readlines()
             f.close()
         
-        file_str = '\n'.join(textwrap.wrap(any_file, width=998))
+        temp_str = ' '.join(any_file)
+        file_str = '\n'.join(textwrap.wrap(temp_str, width=998))
         return file_str
 
     # This will import any file and return a bytes string
