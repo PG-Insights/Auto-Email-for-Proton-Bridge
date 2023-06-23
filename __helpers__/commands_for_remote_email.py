@@ -32,7 +32,7 @@ def transfer_large_file_to_remote(
         conn: Connection, 
         file_path: str, 
         save_path: str) -> None:
-    chunk_size = 1024 * 512
+    chunk_size = 1024 * 256
     file_size = os.path.getsize(file_path)
     file_name = Path(file_path).name
     with open(file_path, 'rb') as f:

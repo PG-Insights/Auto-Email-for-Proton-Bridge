@@ -10,6 +10,7 @@ import base64
 import pandas as pd
 from html import escape
 from pathlib import Path
+import textwrap
 
 
 class GetFiles:
@@ -57,7 +58,8 @@ class GetFiles:
         with open(file_path, 'r') as f:
             any_file = f.readlines()
             f.close()
-        file_str = ' '.join(any_file)    
+        
+        file_str = '\n'.join(textwrap.wrap(any_file, width=998))
         return file_str
 
     # This will import any file and return a bytes string

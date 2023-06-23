@@ -11,6 +11,7 @@ Created on Sun Feb 19 09:26:48 2023
 
 import sys
 from pathlib import Path
+from smtplib import SMTPDataError
 
 MAIN_DIR = Path(__file__).parent
 
@@ -74,11 +75,18 @@ if __name__ == '__main__':
 
         conn = return_ssh_connection()
         time.sleep(.5)
-        commands.transfer_file_to_remote(
-            conn,
-            args.html_path,
-            '/home/opc/email_venv/html_files',
-        )
+        try:
+            commands.transfer_file_to_remote(
+                conn,
+                args.html_path,
+                '/home/opc/email_venv/html_files',
+            )
+        except:
+            commands.transfer_large_file_to_remote(
+                conn,
+                args.html_path,
+                '/home/opc/email_venv/html_files',
+            )
         time.sleep(.5)
         commands.transfer_file_to_remote(
             conn,
