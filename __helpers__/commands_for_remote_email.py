@@ -21,7 +21,7 @@ def transfer_file_to_remote(
         conn: Connection, 
         file_path: str, 
         save_path: str) -> None:
-    transport = conn.get_transport()
+    transport = conn.get_transport
     sftp = transport.open_sftp()
     with open(file_path, 'rb') as f:
         with sftp.file(save_path, 'wb') as remote_file:
