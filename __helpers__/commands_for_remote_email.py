@@ -17,12 +17,20 @@ from __helpers__.compose_email import ComposeEmail
 
 
 
-def trasfer_file_to_remote(
-        conn: Connection,
-        file_path: str,
+def transfer_file_to_remote(
+        conn: Connection, 
+        file_path: str, 
         save_path: str) -> None:
-    with conn:
-        conn.put(file_path, save_path)
+    transport = conn.get_transport()
+    sftp = transport.open_sftp()
+    with open(file_path, 'rb') as f:
+        with sftp.file(save_path, 'wb') as remote_file:
+            while True:
+                data = f.read(1024)
+                if not data:
+                    break
+                remote_file.write(data)
+    sftp.close()
 
 
 def run_remote_command_in_shell(

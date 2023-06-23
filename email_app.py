@@ -74,27 +74,27 @@ if __name__ == '__main__':
 
         conn = return_ssh_connection()
         time.sleep(.5)
-        commands.trasfer_file_to_remote(
+        commands.transfer_file_to_remote(
             conn,
             args.html_path,
             '/home/opc/email_venv/html_files',
         )
         time.sleep(.5)
-        commands.trasfer_file_to_remote(
+        commands.transfer_file_to_remote(
             conn,
             args.emails_path,
             '/home/opc/email_venv/email_lists',
         )
         time.sleep(.5)
         if png_path:
-            commands.trasfer_file_to_remote(
+            commands.transfer_file_to_remote(
                 conn,
                 args.png_path,
                 '/home/opc/email_venv/email_png',
             )
             time.sleep(.5)
         if pdf_path:
-            commands.trasfer_file_to_remote(
+            commands.transfer_file_to_remote(
                 conn,
                 args.pdf_path,
                 '/home/opc/email_venv/pdf_attach',
