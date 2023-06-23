@@ -25,12 +25,13 @@ def transfer_file_to_remote(
         save_path: str) -> None:
     chunk_size = 1024 * 1024  # 1 MiB
     file_size = os.path.getsize(file_path)
+    filename = Path(file_path).name  # get the filename from the file_path
     with open(file_path, 'rb') as f:
         for i in range(0, file_size, chunk_size):
             chunk = f.read(chunk_size)
-            remote_file_path = f"{save_path}.part{i // chunk_size}"
+            remote_file_path = Path(save_path, f'{filename}.part{i // chunk_size}')
             conn.put(BytesIO(chunk), remote_file_path)
-    conn.run(f'cat {save_path}.part* > {save_path} && rm {save_path}.part*')
+    conn.run(f'cat {Path(save_path, filename)}.part* > {Path(save_path, filename)} && rm {Path(save_path, filename)}.part*')
 
 
 def run_remote_command_in_shell(
