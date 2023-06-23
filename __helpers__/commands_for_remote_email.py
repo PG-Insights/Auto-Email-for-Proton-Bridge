@@ -11,7 +11,7 @@ from fabric import Connection
 from pathlib import Path
 import sys
 import os
-import BytesIO
+from io import BytesIO
 
 if str(Path(__file__).parent) not in sys.path:
     sys.path.append(str(Path(__file__).parent))
