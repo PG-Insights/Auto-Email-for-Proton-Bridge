@@ -27,7 +27,9 @@ if __name__ == '__main__':
     from ssh_login import return_ssh_connection
     
     app_dir = Path(__file__).parents[1]
-    html_path = None #f'{app_dir}/html_files/Cups and Bowls Newsletter 1.html' 
+    html_path = None #f'{app_dir}/html_files/Cups and Bowls Newsletter 1.html'
+    from_email = None #'contact@cupsnbowls.com'
+    url_str = None #'https://cupsnbowls.com/email_monitoring/email_test_1'
     emails_path = None #f'{app_dir}/email_lists/test_list_1.csv'  
     png_path = None #f'{app_dir}/email_png/no_chalk_pdf_png_test.png'
     pdf_path = None #f'{app_dir}/pdf_attach/cnb_newsletter_1.pdf' 
@@ -45,6 +47,11 @@ if __name__ == '__main__':
             'emails_path', 
             type=str, 
             help='Path to CSV or Excel with "emails" column'
+        )
+        parser.add_argument(
+            'from_email', 
+            type=str, 
+            help='Email address sending emails from'
         )
         parser.add_argument(
             '--url_str', 
@@ -69,6 +76,7 @@ if __name__ == '__main__':
 
         emails_path = args.emails_path
         html_path = args.html_path
+        from_email = args.from_email
         url_str = args.url_str if args.url_str else None
         png_path = args.png_path if args.png_path else None
         pdf_path = args.pdf_path if args.pdf_path else None

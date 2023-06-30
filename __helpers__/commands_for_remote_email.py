@@ -61,6 +61,7 @@ def run_remote_command_in_shell(
 def create_send_email_commands(
         html_path: str,
         csv_or_excel_path: str,
+        from_email: str,
         *,
         url_str: str=None,
         png_path: str=None,
@@ -82,6 +83,7 @@ def create_send_email_commands(
         f'"{str(main_dir)}/__helpers__/compose_email.py"',
         f'"{str(html_path)}"',
         f'"{str(csv_or_excel_path)}"',
+        f'{str(from_email)}',
     ]
         
     command_clear_folders = [
