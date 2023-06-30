@@ -120,6 +120,7 @@ if __name__ == '__main__':
         c1, c2, c3 = commands.create_send_email_commands(
             args.html_path,
             args.emails_path,
+            args.from_email,
             url_str=args.url_str,
             png_path=args.png_path,
             pdf_path=args.pdf_path,

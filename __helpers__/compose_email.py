@@ -185,7 +185,7 @@ if __name__ == '__main__':
     email_obj = ComposeEmail(
         emails_path,
         html_path,
-        from_email=from_email,
+        from_email,
         url_str=url_str,
         png_path=png_path,
         pdf_path=pdf_path
