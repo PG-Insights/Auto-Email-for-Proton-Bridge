@@ -30,4 +30,4 @@ if __name__ == '__main__':
         print(str_var + str_var)
     
     conn = return_ssh_connection()
-    print(conn)
+    print(conn.is_connected)
