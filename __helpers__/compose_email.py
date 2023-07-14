@@ -59,7 +59,7 @@ class ComposeEmail:
         try:
             return GetFiles(self.emails_list_or_path).data
         except ValueError:
-            return list(self.emails_list_or_path)
+            return [self.emails_list_or_path]
         
     def compose_html_email(self) -> MIMEText:   
         self.msg['From'] = self.from_email
