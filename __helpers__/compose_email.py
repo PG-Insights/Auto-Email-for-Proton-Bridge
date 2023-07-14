@@ -187,8 +187,8 @@ if __name__ == '__main__':
     
     # Create the email_obj from either args or data from IDE
     email_obj = ComposeEmail(
-        emails_path,
         html_path,
+        emails_path,
         from_email,
         url_str=url_str,
         png_path=png_path,
