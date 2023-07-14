@@ -36,6 +36,7 @@ class ComposeEmail:
         self.from_email = from_email
         self.emails_list_or_path = emails_list_or_path
         self.emails_list = self._set_emails_list()
+        print('\n\nEmails List: ', self.emails_list, '\n\n')
         self.html_obj = GetFiles(html_path)
         self.email_subject = self.html_obj.filename
         self.html_obj.data = GetFiles._append_tracking_url_to_html_str(
@@ -55,9 +56,9 @@ class ComposeEmail:
         self.composed_email = self.compose_html_email()
         
     def _set_emails_list(self) -> list:
-        if Path(self.emails_list_or_path).exists():
+        try:
             return GetFiles(self.emails_list_or_path).data
-        else:
+        except ValueError:
             return list(self.emails_list_or_path)
         
     def compose_html_email(self) -> MIMEText:   
