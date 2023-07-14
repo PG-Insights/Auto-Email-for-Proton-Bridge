@@ -25,25 +25,23 @@ class ComposeEmail:
     
     def __init__(
             self,
-            emails_list_path: str,
-            html_path: str,
-            from_email: str='contact@cupsnbowls.com',
+            emails_list_or_path: str,
+            html_path: str = 'html_files/Welcome to No Chalk.html',
+            from_email: str = 'team@nochalknet.com',
             *,
-            url_str: str=None,
-            png_path: str=None,
-            pdf_path: str=None):
+            url_str: str = 'welcome_email',
+            pdf_path: str = 'html_files/Welcome to No Chalk.html',
+            png_path: str = None):
         self.msg = MIMEMultipart()
         self.from_email = from_email
-        self.emails_list_path = emails_list_path
-        self.emails_list = GetFiles(self.emails_list_path).data
+        self.emails_list_or_path = emails_list_or_path
+        self.emails_list = self._set_emails_list()
         self.html_obj = GetFiles(html_path)
         self.email_subject = self.html_obj.filename
-        
-        if url_str:
-            self.html_obj.data = GetFiles._append_tracking_url_to_html_str(
-                url_str,
-                self.html_obj.data
-            )
+        self.html_obj.data = GetFiles._append_tracking_url_to_html_str(
+            url_str,
+            self.html_obj.data
+        )
         if png_path:
             self.png_path = Path(png_path)
         else:
@@ -55,6 +53,12 @@ class ComposeEmail:
             self.pdf_path = None
         
         self.composed_email = self.compose_html_email()
+        
+    def _set_emails_list(self) -> list:
+        if Path(self.emails_list_or_path).exists():
+            return GetFiles(self.emails_list_or_path).data
+        else:
+            return list(self.emails_list_or_path)
         
     def compose_html_email(self) -> MIMEText:   
         self.msg['From'] = self.from_email
