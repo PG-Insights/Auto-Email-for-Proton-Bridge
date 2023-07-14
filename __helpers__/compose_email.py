@@ -25,8 +25,8 @@ class ComposeEmail:
     
     def __init__(
             self,
+            html_path: str,
             emails_list_or_path: str,
-            html_path: str = 'html_files/Welcome to No Chalk.html',
             from_email: str = 'team@nochalknet.com',
             *,
             url_str: str = 'welcome_email',
